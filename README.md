@@ -57,5 +57,5 @@ Reference :
 
 ## File Description
 
-- **README.md：**项目总体文档，
-- **VSLAM_Relate_Paper：**该文件夹下面存放了一些VSLAM的论文；如果你对VSLAM感兴趣，或者想了解相关原理以及实现方法，你可以参考该目录下的论文或者文件。
+- **README.md**：项目总体文档，
+- **VSLAM_Relate_Paper**：该文件夹下面存放了一些VSLAM的论文；如果你对VSLAM感兴趣，或者想了解相关原理以及实现方法，你可以参考该目录下的论文或者文件。
