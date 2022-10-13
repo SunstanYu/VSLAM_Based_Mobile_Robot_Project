@@ -6,9 +6,9 @@
 >
 > @Date：2022-10-13
 >
-> Github Link：[https://github.com/SUSTech-AMASLAB/VSLAM_Based_Mobile_Robot_Project](https://github.com/SUSTech-AMASLAB/VSLAM_Based_Mobile_Robot_Project)
+> @Github Link：[https://github.com/SUSTech-AMASLAB/VSLAM_Based_Mobile_Robot_Project](https://github.com/SUSTech-AMASLAB/VSLAM_Based_Mobile_Robot_Project)
 >
-> Project Author：[喻锦城](https://github.com/SunstanYu)、[Li Dong](https://github.com/DoongLi)
+> @Project Author：[喻锦城](https://github.com/SunstanYu)、[Li Dong](https://github.com/DoongLi)
 
 ## Introduction
 
