@@ -80,3 +80,21 @@ roslaunch realsense2_camera rs_camera.launch
 roslaunch realsense2_camera demo_pointcloud.launch
 #会自动打开rviz并显示图像
 ```
+
+
+
+### T265测试
+
+```
+roslaunch realsense2_camrs_t265.launch enable_fisheye1:=true enable_fisheye2:=true 
+```
+
+可以看到以下话题：
+
+- /camera/odom/sample
+- /camera/accel/sample
+- /camera/gyro/sample
+- /camera/fisheye1/image_raw
+- /camera/fisheye2/image_raw
+
+默认enable_fisheye=false,需要手动设置

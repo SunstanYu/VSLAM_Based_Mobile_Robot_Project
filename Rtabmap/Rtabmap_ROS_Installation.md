@@ -46,7 +46,7 @@ catkin_make -j4
 
 至此安装结束，但是catkin_make时可能遇到关于opencv_config的问题，原因是cmakelist中所需的opencv_contrib库未安装
 
-![image-20221018234919719](/home/amas-lab-0/.config/Typora/typora-user-images/image-20221018234919719.png)
+![image-20221018234919719](Rtabmap_ROS_Installation.assets/image-20221018234919719.png)
 
 所以需要安装opencv_contrib中的optflow
 

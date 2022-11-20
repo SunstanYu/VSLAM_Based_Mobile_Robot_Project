@@ -1,0 +1,39 @@
+<launch>
+
+  <!-- RGB-D related topics -->
+  <arg name="rgb_topic"               default="/camera/color/image_raw" />
+  <arg name="depth_topic"             default="/camera/aligned_depth_to_color/image_raw" />
+  <arg name="camera_info_topic"       default="/camera/color/camera_info" />
+  <arg name="depth_camera_info_topic" default="$(arg camera_info_topic)" />
+  <arg name="odom"                    default="/odom" />
+  
+  <group ns="planner">
+        <remap from="map" to="/rtabmap/proj_map"/>
+        <remap from="move_base_simple/goal" to="/planner_goal"/>
+        <remap from="odom"            to="$(arg odom)"/>
+
+        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+     	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/local_costmap_params_3d.yaml" command="load" />
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/base_local_planner_params.yaml" command="load" />
+   		  
+      </node>
+   		
+        <param name="cmd_vel/abtr_priority" value="10"/>
+  </group>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_to_camera_link"
+	    args="0.01 0.06 0.9 0 0.37 0 base_link camera_link 100" />    
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom"
+	    args="0 0 0 0 0 0  map odom 100" />  
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_base_footprint"
+	    args="0 0 0 0 0 0  odom base_footprint 100" />  
+  <node pkg="tf" type="static_transform_publisher" name="footprint_to_base"
+	    args="0 0 0 0 0 1 base_footprint base_link 100" />  
+  
+ 
+
+
+</launch>

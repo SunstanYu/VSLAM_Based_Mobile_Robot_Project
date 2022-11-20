@@ -1,0 +1,111 @@
+<launch>
+  <!--
+    $ sudo apt install ros-melodic-turtlebot3* ros-melodic-dwa-local-planner
+    To avoid TF warning about leading '/' in frame name, remove it in:
+       - "/opt/ros/melodic/share/turtlebot3_navigation/param/global_costmap_params.yaml"
+       - "/opt/ros/melodic/share/turtlebot3_navigation/param/local_costmap_params.yaml"
+
+    Example Gazebo:
+    $ export TURTLEBOT3_MODEL=waffle
+    $ roslaunch turtlebot3_gazebo turtlebot3_world.launch
+
+    $ export TURTLEBOT3_MODEL=waffle
+    $ roslaunch rtabmap_ros demo_turtlebot3_navigation.launch
+  -->
+
+  <!-- Arguments -->
+  <arg name="open_rviz" default="true"/>
+  <arg name="rtabmapviz" default="true"/>
+  <arg name="move_forward_only" default="false"/>
+
+  <arg name="with_camera" default="true"/>
+  <arg name="localization" default="false"/>
+  <arg name="database_path" default="~/.ros/rtabmap.db"/>
+  <arg     if="$(arg localization)" name="rtabmap_args" default=""/>
+  <arg unless="$(arg localization)" name="rtabmap_args" default="-d"/>
+
+  <!-- Turtlebot3 -->
+  <include file="$(find tracer_bringup)/launch/tracer_robot_base.launch"/>
+
+  <group ns="rtabmap">
+    <node  name="rgbd_sync" pkg="rtabmap_ros" type="rgbd_sync" output="screen">
+      <remap from="rgb/image"         to="/camera/color/image_raw"/>
+      <remap from="depth/image"       to="/camera/aligned_depth_to_color/image_raw"/>
+      <remap from="rgb/camera_info"   to="/camera/color/camera_info"/>
+      <param name="approx_sync"       value="true"/>
+    </node>
+  
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="$(arg rtabmap_args)">
+      <param name="database_path"       type="string" value="$(arg database_path)"/>
+      <param name="frame_id"            type="string" value="base_footprint"/>
+      <param name="subscribe_rgb"   type="bool" value="false"/>
+      <param name="subscribe_depth" type="bool" value="false"/>
+      <param name="subscribe_rgbd" type="bool" value="true"/>
+      <!--param name="subscribe_scan"      type="bool"   value="true"/-->
+      <param name="approx_sync"         type="bool"   value="true"/>
+      
+      <!-- use actionlib to send goals to move_base --> 
+      <param name="use_action_for_goal" type="bool" value="true"/>
+      <remap from="move_base"            to="/move_base"/>
+	
+      <!-- inputs -->
+      <remap from="odom"            to="/odom"/>
+      <remap from="rgbd_image"       to="rgbd_image"/>
+
+      <!-- output -->
+      <remap from="grid_map" to="/map"/>
+	
+      <!-- RTAB-Map's parameters -->
+      <param name="Reg/Strategy"                 type="string" value="1"/>
+      <param name="Reg/Force3DoF"                type="string" value="true"/>
+      <param name="GridGlobal/MinSize"           type="string" value="20"/>
+
+      <!-- localization mode -->
+      <param     if="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="false"/>
+      <param unless="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="true"/>
+    </node>
+
+    <!-- visualization with rtabmapviz -->
+    <node if="$(arg rtabmapviz)" pkg="rtabmap_ros" type="rtabmapviz" name="rtabmapviz" args="-d $(find rtabmap_ros)/launch/config/rgbd_gui.ini" output="screen">
+      <!--param name="subscribe_scan"   type="bool"   value="true"/-->
+      <param name="subscribe_odom"   type="bool"   value="true"/>
+      <param name="frame_id"         type="string" value="base_footprint"/>
+      <param name="approx_sync"      type="bool"   value="true"/>
+
+      <remap from="odom"            to="/odom"/>
+      
+    </node>
+  </group>
+
+  <!-- move_base -->
+    <group ns="planner">
+        <remap from="map" to="/rtabmap/proj_map"/>
+        <remap from="move_base_simple/goal" to="/planner_goal"/>
+        <remap from="odom"            to="/odom"/>
+
+        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+     	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/local_costmap_params_3d.yaml" command="load" />
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+    	  <rosparam file="$(find rtabmap_ros)/launch/azimut3/config/base_local_planner_params.yaml" command="load" />
+   		  
+      </node>
+   		
+        <param name="cmd_vel/abtr_priority" value="10"/>
+  </group>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_to_camera_link"
+	    args="0.01 0.06 0.9 0 0.37 0 base_link camera_link 100" />    
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom"
+	    args="0 0 0 0 0 0  map odom 100" />  
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_base_footprint"
+	    args="0 0 0 0 0 0  odom base_footprint 100" />  
+  <node pkg="tf" type="static_transform_publisher" name="footprint_to_base"
+	    args="0 0 0 0 0 1 base_footprint base_link 100" />  
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find rtabmap_ros)/azimut3/config/azimut3.rviz"/>
+  </group>
+</launch>
