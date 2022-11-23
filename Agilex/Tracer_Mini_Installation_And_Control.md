@@ -78,7 +78,7 @@ tracer_ros包中有一处问题会编译不通过，注释掉才可以通过
 
 问题在/catkin_ws/src/tracer_ros/tracer_gazebo_sim/CMakeLists.txt
 
-![image-20220929111952100](/home/amas-lab-0/.config/Typora/typora-user-images/image-20220929111952100.png)
+![image-20220929111952100](Tracer_Mini_Installation_And_Control.assets/image-20220929111952100.png)
 
 编译
 
@@ -136,3 +136,6 @@ Usage: app_tracer_demo <interface>
 Example 1: ./app_tracer_demo can0
 
 正常运行会进行灯光测试和运动测试
+
+
+
