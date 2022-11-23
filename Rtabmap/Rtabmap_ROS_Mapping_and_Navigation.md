@@ -69,9 +69,7 @@ rtabmap-databaseViewer ~/.ros/rtabmap.db
 
 
 
-![map](Rtabmap_ROS_Tutorials.assets/map.png)
-
-
+![](Rtabmap_ROS_Mapping_and_Navigation.assets/map.png)
 
 
 
@@ -97,11 +95,11 @@ roslaunch rtabmap_ros demo_turtlebot3_navigation.launch
 
 仿真效果：
 
-![](Rtabmap_ROS_Tutorials.assets/screenshot_1.png)
+![](Rtabmap_ROS_Mapping_and_Navigation.assets/screenshot.png)
 
-![](Rtabmap_ROS_Tutorials.assets/screenshot.png)
+![](Rtabmap_ROS_Mapping_and_Navigation.assets/screenshot_2.png)
 
-![](Rtabmap_ROS_Tutorials.assets/screenshot_3.png)
+![](Rtabmap_ROS_Mapping_and_Navigation.assets/screenshot_3.png)
 
 
 
@@ -111,7 +109,7 @@ roslaunch rtabmap_ros demo_turtlebot3_navigation.launch
 
 但是tf的准确数据并没有测量，move_base的参数也没有修改（使用样例参数）
 
-![](Rtabmap_ROS_Tutorials.assets/screenshot_6.png)
+![](Rtabmap_ROS_Mapping_and_Navigation.assets/screenshot_6.png)
 
 目前按照mapping的逻辑运行rtabmap并启动底盘，之后再运行robot_setting.launch会导致在rviz中可以生成栅格地图，也可以显示坐标变换，但导航功能无法启动，既不能发布导航指令也不能发布速度指令，所以应该还是在rtabmap和move_base之间的参数设置有问题。
 
@@ -125,11 +123,11 @@ roslaunch rtabmap_ros demo_turtlebot3_navigation.launch
 
 move_base框架：
 
-![image-20221108102707138](Rtabmap_ROS_Tutorials.assets/image-20221108102707138.png)
+![](Rtabmap_ROS_Mapping_and_Navigation.assets/image-20221108102707138.png)
 
 turtlebot中利用rtabmap的框架：
 
-![](Rtabmap_ROS_Tutorials.assets/overview_tf_rtabmap.png)
+![](Rtabmap_ROS_Mapping_and_Navigation.assets/overview_tf_rtabmap.png)
 
 tracer 发布的topic：
 
